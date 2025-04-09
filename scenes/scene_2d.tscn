@@ -1,0 +1,129 @@
+[gd_scene load_steps=8 format=3 uid="uid://84qaudhc20rx"]
+
+[ext_resource type="Script" uid="uid://bc28717rv0124" path="res://scripts/scene_2d.gd" id="1_0tp18"]
+[ext_resource type="Script" uid="uid://cs3v8pbeau6bt" path="res://scripts/steering_agent.gd" id="2_6iwbl"]
+[ext_resource type="Script" uid="uid://bdnf5f82lq7u5" path="res://scripts/triangle_visual.gd" id="3_8o1lk"]
+[ext_resource type="Script" uid="uid://frli4kuo3rex" path="res://scripts/path_2d.gd" id="4_1xwxn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uv5y8"]
+radius = 20.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_556m2"]
+
+[sub_resource type="Curve2D" id="Curve2D_556m2"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 525, 219, 0, 0, 0, 0, 744, 111, 0, 0, 0, 0, 973, 192, 0, 0, 0, 0, 1050, 362, 0, 0, 0, 0, 939, 519, 0, 0, 0, 0, 539, 574, 0, 0, 0, 0, 212, 511, 0, 0, 0, 0, 123, 193, 0, 0, 0, 0, 332, 84, 0, 0, 0, 0, 525, 219)
+}
+point_count = 10
+
+[node name="Scene2D" type="Node2D"]
+script = ExtResource("1_0tp18")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+offset_left = 7.0
+offset_top = 9.0
+offset_right = 643.0
+offset_bottom = 49.0
+alignment = 1
+
+[node name="BtnDefault" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Default"
+
+[node name="BtnSeek" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Seek"
+
+[node name="BtnFlee" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Flee"
+
+[node name="BtnPursuit" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Pursuit"
+
+[node name="BtnEvasion" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Evasion"
+
+[node name="BtnArrival" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Arrival"
+
+[node name="BtnDeparture" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Departure"
+
+[node name="BtnWander" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Wander"
+
+[node name="BtnPathFollow" type="Button" parent="CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Path Follow"
+
+[node name="Agent" type="CharacterBody2D" parent="." node_paths=PackedStringArray("path")]
+position = Vector2(565, 320)
+script = ExtResource("2_6iwbl")
+path = NodePath("../PathNode/Path2D")
+
+[node name="TriangleVisual" type="Node2D" parent="Agent"]
+script = ExtResource("3_8o1lk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Agent"]
+shape = SubResource("CircleShape2D_uv5y8")
+
+[node name="Obstacle1" type="StaticBody2D" parent="." groups=["obstacles"]]
+position = Vector2(320, 320)
+scale = Vector2(2, 2)
+
+[node name="ColorRect" type="ColorRect" parent="Obstacle1"]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle1"]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_556m2")
+
+[node name="Obstacle2" type="StaticBody2D" parent="." groups=["obstacles"]]
+position = Vector2(835, 361)
+scale = Vector2(2, 2)
+
+[node name="ColorRect" type="ColorRect" parent="Obstacle2"]
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle2"]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_556m2")
+
+[node name="PathNode" type="Node2D" parent="."]
+
+[node name="Path2D" type="Path2D" parent="PathNode"]
+curve = SubResource("Curve2D_556m2")
+script = ExtResource("4_1xwxn")
+
+[node name="Line2D" type="Line2D" parent="PathNode/Path2D"]
+width = 5.0
+default_color = Color(0.847261, 0.692124, 0, 1)
+antialiased = true
+
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnDefault" to="." method="_on_btn_default_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnSeek" to="." method="_on_btn_seek_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnFlee" to="." method="_on_btn_flee_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnPursuit" to="." method="_on_btn_pursuit_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnEvasion" to="." method="_on_btn_evasion_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnArrival" to="." method="_on_btn_arrival_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnDeparture" to="." method="_on_btn_departure_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnWander" to="." method="_on_btn_wander_pressed"]
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/BtnPathFollow" to="." method="_on_btn_path_follow_pressed"]
